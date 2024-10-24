@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "263704643972",
+    "project_id": "on-service-c31de",
+    "storage_bucket": "on-service-c31de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263704643972:android:050ee1ac52decb365df5d1",
+        "android_client_info": {
+          "package_name": "com.example.onservice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1BetFwAAiG30YbO5CDyVxzuq8IF6IVjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
