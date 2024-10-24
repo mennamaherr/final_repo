@@ -1,6 +1,56 @@
+//  import 'package:flutter/material.dart';
+// import 'dart:async';
+// import 'onboarding_screen.dart';
+
+// class SplashScreen extends StatefulWidget {
+//   @override
+//   _SplashScreenState createState() => _SplashScreenState();
+// }
+
+// class _SplashScreenState extends State<SplashScreen> {
+//   @override
+//   void initState() {
+//     super.initState();
+// Timer(Duration(seconds: 3), () {
+//   Navigator.of(context).pushReplacement(
+//     MaterialPageRoute(builder: (_) => OnboardingScreen()),
+//   );
+// });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Container(
+//         color: Color(0xff6759FF),
+//         child: Center(
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Image.asset('assets/onboarding_images/home.png'),
+//               SizedBox(height: 20),
+//               Text(
+//                 'Home Services',
+//                 style: TextStyle(
+//                   fontSize: 24,
+//                   fontWeight: FontWeight.bold,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:onservice/features/auth/screens/onboarding_screen.dart';
 import 'package:onservice/features/auth/screens/signInScreen.dart';
 import 'package:onservice/my_home.dart';
 import '../../../firebase_options2.dart'; // Import the second firebase_options.dart file
@@ -17,7 +67,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     //_initializeFirebase();
+    Timer(Duration(seconds: 4), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => OnboardingScreen()),
+      );
+    });
   }
+
 /*
   _initializeFirebase() async {
     try {
@@ -83,17 +139,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              "Splash Screen",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(),
-          ],
+      body: Container(
+        color: Color(0xff6759FF),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/home.png'),
+              SizedBox(height: 20),
+              Text(
+                'Home Services',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

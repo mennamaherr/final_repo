@@ -22,41 +22,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Function to validate email format
+ // Function to validate email format
   String? validateEmail(String value) {
     String pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     RegExp regex = RegExp(pattern);
+
     if (value.isEmpty) {
       return "Email address must not be empty";
     } else if (!regex.hasMatch(value)) {
       return "Enter a valid email address";
+    } else if (value.contains(' ')) {
+      return "Email must not contain spaces";
     }
+
+
+    List<String> validDomains = ['gmail.com', 'yahoo.com', 'outlook.com'];
+    String domain = value.split('@').last;
+    if (!validDomains.contains(domain)) {
+      return "Email domain is not supported";
+    }
+
     return null;
   }
+
 
   // Function to validate password
   String? validatePassword(String value) {
     if (value.isEmpty) {
       return "Password must not be empty";
-    } else if (value.length < 6) {
-      return "Password must be at least 6 characters long";
+    } else if (value.length < 8) {
+      return "Password must be at least 8 characters long";
+    } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return "Password must contain at least one uppercase letter";
+    } else if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return "Password must contain at least one lowercase letter";
+    } else if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return "Password must contain at least one number";
+    } else if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) {
+      return "Password must contain at least one special character";
     }
+
     return null;
   }
 
   void _register() async {
+    if (formkey.currentState!.validate()) {
     String email = _emailController.text;
     String password = _passwordController.text;
     String username = _usernameController.text;
 
-    if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty) {
       await _authService.registerWithEmail(email, password, username);
-      // تحديث displayName بالاسم الكامل
-      await FirebaseAuth.instance.currentUser!
-          .updateDisplayName(_usernameController.text.trim());
-
-      // تأكد من إعادة تحميل البيانات المحدثة للمستخدم
-      await FirebaseAuth.instance.currentUser!.reload();
       print(_emailController.text);
       print(_passwordController.text);
       Navigator.push(
@@ -65,11 +80,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           builder: (context) => CompleteReg(),
         ),
       );
+
     } else {
       print("Please fill in all fields");
     }
   }
-
   var formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {

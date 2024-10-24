@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home:
-       OnboardingScreen(),
-      // SplashScreen() // Set SplashScreen as the initial route
+       //OnboardingScreen(),
+       SplashScreen() // Set SplashScreen as the initial route
     );
   }
 }

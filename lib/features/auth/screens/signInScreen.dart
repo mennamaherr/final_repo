@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onservice/widgets/ButtonNavBar.dart';
 import '../../../LogIn with google/google_auth.dart';
@@ -29,44 +30,76 @@ class _SignInScreenState extends State<SignInScreen> {
     passwordController.dispose();
   }
 
-  // Function to validate email format
+ // Function to validate email format
   String? validateEmail(String value) {
     String pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     RegExp regex = RegExp(pattern);
+
     if (value.isEmpty) {
       return "Email address must not be empty";
     } else if (!regex.hasMatch(value)) {
       return "Enter a valid email address";
+    } else if (value.contains(' ')) {
+      return "Email must not contain spaces";
     }
+
+
+    List<String> validDomains = ['gmail.com', 'yahoo.com', 'outlook.com'];
+    String domain = value.split('@').last;
+    if (!validDomains.contains(domain)) {
+      return "Email domain is not supported";
+    }
+
     return null;
   }
+
 
   // Function to validate password
   String? validatePassword(String value) {
     if (value.isEmpty) {
       return "Password must not be empty";
-    } else if (value.length < 6) {
-      return "Password must be at least 6 characters long";
+    } else if (value.length < 8) {
+      return "Password must be at least 8 characters long";
+    } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return "Password must contain at least one uppercase letter";
+    } else if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return "Password must contain at least one lowercase letter";
+    } else if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return "Password must contain at least one number";
+    } else if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) {
+      return "Password must contain at least one special character";
     }
+
     return null;
   }
 
   void _signIn() async {
+    if (formkey.currentState!.validate()) {
     String email = emailController.text;
     String password = passwordController.text;
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
 
-    if (email.isNotEmpty && password.isNotEmpty) {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null && user.emailVerified) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyHome()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Please verify your email before logging in.'),
+        ));
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
       await _authService.signInWithEmail(email, password);
-      print(emailController.text);
-      print(passwordController.text);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ButtonNavBar(),
-        ),
-      );
     } else {
       print("Please fill in all fields");
+
     }
   }
 
