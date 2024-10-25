@@ -55,6 +55,7 @@ class MyHome extends StatelessWidget {
           const SliverToBoxAdapter(
               child: SizedBox(height: 20)), // Extra spacing before offers
           const SliverFillRemaining(child: OffersListView()),
+         // SliverToBoxAdapter(child: ButtonNavBar(),)
         ],
       ),
     );
